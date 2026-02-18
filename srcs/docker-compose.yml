@@ -1,42 +1,31 @@
-version: '3.8'
-
 services:
-  nginx:
-    container_name: nginx
-    build: ./requirements/nginx/.
-    ports:
-      - "443:443"
-    depends_on:
-      - wordpress
-    volumes:
-      - wordpress:/var/www/html
-    networks:
-      - inception
-    restart: always
-  wordpress:
-    container_name: wordpress
-    build: ./requirements/wordpress/.{}
-    depends_on:
-      - mariadb
-    volumes:
-      - wordpress:/var/www/html
+  mariadb:
+    build:
+      context: ./requirements/mariadb
+      dockerfile: Dockerfile
+    image: mariadb:1.0
+    container_name: mariadb
     env_file:
       - .env
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
     networks:
-      - inception
-    restart: always
-  
-  # mariadb:
-  #   container_name: mariadb
-  #   build: ./requirements/bonus/ftp/.
-  #   depends_on:
-  #     - wordpress
-  #   volumes:
-  #     - wordpress: /home/frahenin/ftp/files
-  #   ports:
-  #     - "21:21"
-  #     - "20:20"
-  #     - "40000-40005:40000-40005"
-  #   networks:
-  #     - inception
-  #   restart: always
+      - inception_network
+    restart: unless-stopped
+    secrets:
+      - db_root_password
+      - db_password
+
+secrets:
+  db_root_password:
+    file: ../secrets/db_root_password.txt
+  db_password:
+    file: ../secrets/db_password.txt
+networks:
+  inception_network:
+    driver: bridge
+
+volumes:
+  mariadb_data:
