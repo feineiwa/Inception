@@ -1,13 +1,11 @@
 #!/bin/bash
 
-set -x
-
 MYSQL_ROOT_PASSWORD=$(cat /run/secrets/db_root_password)
 MYSQL_PASSWORD=$(cat /run/secrets/db_password)
 
 DATADIR=/var/lib/mysql
 
-if [ ! -d "$DATADIR/mysql" ]; then
+if [ ! -d "$DATADIR/$MYSQL_DATABASE" ]; then
     echo "[INFO] Initializing MariaDB..."
     mysqld_safe &
 

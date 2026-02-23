@@ -12,7 +12,7 @@ RUN chmod +x /temp/setup.sh
 
 EXPOSE 3306
 
-CMD [ "/temp/setup.sh" ]
+ENTRYPOINT [ "/temp/setup.sh" ]
 
 LABEL pseudo="frahenin" \
 	  email="frahenin@student.42antananarivo.mg" \
