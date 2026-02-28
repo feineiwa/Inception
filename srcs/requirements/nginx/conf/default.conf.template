@@ -19,16 +19,6 @@
 # Default server configuration
 
 server {
-	listen 80 default_server;
-	listen [::]:80 default_server;
-	server_name localhost;
-	return 301 https://$host$request_uri;
-}
-
-#
-
-
-server {
         # SSL configuration
         #
         listen 443 ssl default_server;
@@ -59,7 +49,7 @@ server {
         # Add index.php to the list if you are using PHP
         index index.php;
 
-        server_name localhost;
+        server_name ${DOMAIN_NAME};
 
         location / {
                 # First attempt to serve request as file, then

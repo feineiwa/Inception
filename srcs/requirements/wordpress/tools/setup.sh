@@ -35,7 +35,7 @@ fi
 # Create normal user if not exists
 if ! wp user get "$WP_USERNAME" --allow-root > /dev/null 2>&1; then
     wp user create "$WP_USERNAME" "$WP_USER_EMAIL" \
-        --role=subscriber \
+        --role=editor \
         --user_pass="$WP_USER_PASSWORD" \
         --allow-root
 fi

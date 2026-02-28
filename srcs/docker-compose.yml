@@ -14,11 +14,6 @@ services:
     secrets:
       - db_root_password
       - db_password
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
     restart: unless-stopped
   
   wordpress:
@@ -38,8 +33,7 @@ services:
       - wp_admin_password
       - wp_user_password
     depends_on:
-      mariadb:
-        condition: service_healthy
+      - mariadb
     restart: unless-stopped
 
   nginx:
@@ -51,7 +45,6 @@ services:
     env_file:
       - .env
     ports:
-      - "80:80"
       - "443:443"
     networks:
       - inception
@@ -81,10 +74,11 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: /home/frahenin/data/mariadb
+      device: /home/$USER/data/mariadb
   worpress_data:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: /home/frahenin/data/wordpress
+      device: /home/$USER/data/wordpress
+  

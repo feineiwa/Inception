@@ -1,45 +1,44 @@
-# Inception Makefile
-
 COMPOSE = docker compose
 COMPOSE_FILE = -f ./srcs/docker-compose.yml
+
+USER = $(shell whoami)
 
 NAME = inception
 
 all: up
 
-# Build and start containers
 up:
-	if [ ! -d /home/frahenin/data/mariadb ]; then \
-		mkdir -p /home/frahenin/data/mariadb; \
+	if [ ! -d /home/$(USER)/data/mariadb ]; then \
+		mkdir -p /home/$(USER)/data/mariadb; \
 	fi
-	if [ ! -d /home/frahenin/data/wordpress ]; then \
-		mkdir -p /home/frahenin/data/wordpress; \
+	if [ ! -d /home/$(USER)/data/wordpress ]; then \
+		mkdir -p /home/$(USER)/data/wordpress; \
 	fi
 	$(COMPOSE) $(COMPOSE_FILE) up --build -d
 
-# Stop containers
 down:
 	$(COMPOSE) $(COMPOSE_FILE) down
 
-# Stop and remove volumes
 clean:
 	$(COMPOSE) $(COMPOSE_FILE) down -v
 
-# Full clean (containers, volumes, images)
 fclean:
 	$(COMPOSE) $(COMPOSE_FILE) down -v --rmi all
-	sudo rm -rf /home/frahenin/data/mariadb/
-	sudo rm -rf /home/frahenin/data/wordpress/
+	docker builder prune -af
+	docker system prune -af
+	sudo rm -rf /home/$(USER)/data/mariadb/
+	sudo rm -rf /home/$(USER)/data/wordpress/
 
-# Rebuild everything from scratch
 re: fclean up
 
-# Show running containers
-# ps:
-# 	$(COMPOSE) ps
+ps:
+	docker ps -a
 
-# # View logs
-# logs:
-# 	$(COMPOSE) logs -f
+logs:
+	$(COMPOSE) $(COMPOSE_FILE) logs -f
 
-.PHONY: all up down clean fclean re ps logs
+
+build:
+	$(COMPOSE) $(COMPOSE_FILE) build
+
+.PHONY: all up down clean fclean re ps logs build

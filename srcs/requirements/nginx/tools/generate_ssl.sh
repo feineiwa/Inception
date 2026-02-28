@@ -6,5 +6,8 @@ openssl req -x509 -nodes -days 365 \
 	-out /etc/nginx/ssl/nginx.crt \
 	-subj "/C=MG/ST=Antananarivo/L=Antananarivo/O=42/OU=Inception/CN=$DOMAIN_NAME"
 
+envsubst '${DOMAIN_NAME}' \
+< /etc/nginx/templates/default.conf.template \
+> /etc/nginx/conf.d/default.conf
 
-nginx -g "daemon off;"
+exec nginx -g "daemon off;"
