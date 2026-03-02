@@ -5,6 +5,10 @@ MYSQL_PASSWORD=$(cat /run/secrets/db_password)
 
 DATADIR=/var/lib/mysql
 
+mkdir -p /run/mysqld
+chown -R mysql:mysql /run/mysqld
+chmod 755 /run/mysqld
+
 if [ ! -d "$DATADIR/$MYSQL_DATABASE" ]; then
     echo "[INFO] Initializing MariaDB..."
     mysqld_safe &

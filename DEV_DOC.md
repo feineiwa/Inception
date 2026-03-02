@@ -54,7 +54,11 @@ sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin dock
 
 ```bash
 sudo usermod -aG docker $USER
-newgrp docker
+```
+and reboot your os:
+
+```bash
+sudo reboot
 ```
 
 ### Verify installation
@@ -63,6 +67,13 @@ newgrp docker
 docker --version
 docker compose version
 make --version
+```
+
+if make is missing install:
+
+```bash
+sudo apt update
+sudo apt install build-essential
 ```
 
 ---
@@ -406,7 +417,7 @@ make
 | `make ps` | Show container status |
 | `make logs` | Show all service logs |
 | `docker compose logs -f <service>` | Follow logs for one service |
-| `docker compose exec <service> sh` | Open a shell in a container |
+| `docker exec -it <service> sh` | Open a shell in a container |
 | `docker compose restart <service>` | Restart one service |
 | `docker volume ls` | List all volumes |
 | `docker system prune -a` | Remove all unused Docker resources |
